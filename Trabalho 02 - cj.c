@@ -268,10 +268,10 @@ void fundir(struct no *arvore, int i) {
     //Vou para o filho da esquerda e vou para o filho da direita
     filho_um = arvore->filhos[i];
     filho_dois = arvore->filhos[i+1];
-    printf("\nTESTANDO\n");
-    printf("FILHO UM: %d", filho_um->dados[0]->chave);
-    printf("\nFILHO DOIS: %d\n", filho_dois->dados[0]->chave);
-    printf("\nArvore dados: %d\n", arvore->dados[i]->chave);
+    //printf("\nTESTANDO\n");
+    //printf("FILHO UM: %d", filho_um->dados[0]->chave);
+    //printf("\nFILHO DOIS: %d\n", filho_dois->dados[0]->chave);
+    //printf("\nArvore dados: %d\n", arvore->dados[i]->chave);
 
     //Adiciono na próxima posição livre  o dado que vou fundir
     filho_um->dados[filho_um->num_reg] = arvore->dados[i];
@@ -280,21 +280,25 @@ void fundir(struct no *arvore, int i) {
         filho_um->dados[j+2] = filho_dois->dados[j];
     }
 
+    //Se a arvore tem nivel 3 pra cima, e eu tirar do nivel 1, pode ser que eu funda os irmãos que não sao folha, ai o
+    //filho_um cria os filhos do filho_dois que tera morrido por dar seu registro para o irmão
     if (filho_um->filhos[0]) {
         for (j = 0; j <= filho_dois->num_reg; j++) {
+            //printf("\nTESTANDO\n");
             filho_um->filhos[j+2] = filho_dois->filhos[j];
         }
     }
 
     //Arrumar a nova raiz, caso o elemento que fique seja o com indice 1 ou 2 (se for o 0 não entra)
+    //printf("\nvalor de i: %d\n", i);
     for (j = i+1; j < arvore->num_reg; j++) {
         arvore->dados[j-1] = arvore->dados[j];
-        printf("\nTESTANDO1\n");
+        //printf("\nTESTANDO1\n");
     }
 
     for (j = i+2; j <= arvore->num_reg; j++) {
         arvore->filhos[j-1] = arvore->filhos[j];
-        printf("\nTESTANDO2\n");
+        //printf("\nTESTANDO2\n");
     }
 
     //Aqui eu deixo o num_reg com um a mais mesmo, pois vou chamar recursivo remover para tirar esse registro adicional
@@ -361,14 +365,14 @@ void emprestar_do_anterior(struct no *arvore, int i) {
     filho_um = arvore->filhos[i];
     filho_dois = arvore->filhos[i-1];
 
-    printf("Filho um: %d", filho_um->dados[0]->chave);
-    printf("\nFilho dois: %d", filho_dois->dados[0]->chave);
+    /*printf("Filho um: %d", filho_um->dados[0]->chave);
+    printf("\nFilho dois: %d", filho_dois->dados[0]->chave);*/
 
     for (j = filho_um->num_reg - 1; j >= 0; j--) {
         filho_um->dados[j+1] = filho_um->dados[j];
     }
 
-    printf("\nFILHO_UM_DADOS %d", filho_um->dados[j+1]->chave);
+    //printf("\nFILHO_UM_DADOS %d", filho_um->dados[j+1]->chave);
 
     if (filho_um->filhos[0]) {
         for (j = filho_um->num_reg; j >= 0; j--) {
@@ -435,8 +439,8 @@ void preencher(struct no *arvore, int i){
     }
     else{
         if(i != arvore->num_reg){
-            printf("TESTANDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-            printf("\n arvore num_reg: %d", arvore->dados[i]->chave);
+            /*printf("TESTANDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+            printf("\n arvore num_reg: %d", arvore->dados[i]->chave);*/
             fundir(arvore, i);
         }
         else{
@@ -459,7 +463,6 @@ void remover(struct no *arvore, int chave) {
 
     //Se a chave está presente no nó em questão
     if(i < arvore->num_reg && arvore->dados[i]->chave == chave){
-        //Caso seja uma folha
         remover_de_no(arvore, i);
     }
     else{
@@ -469,6 +472,7 @@ void remover(struct no *arvore, int chave) {
         }
 
         //Indica se a chave que eu vou retirar (supostamente) está no último filho do nó
+        //printf("\nVALOR DE I = %d", i);
         if(i == arvore->num_reg){
             flag = 1;
         }
@@ -478,9 +482,9 @@ void remover(struct no *arvore, int chave) {
 
         //Se o filho onde a chave supostamente pode estar tiver somente 1 registro, eu preencho ele
         //para não haver underflow (nó ficar com menos registros que o mínimo permitido)
-        printf("\narvorefilhos %d", arvore->filhos[i]->dados[0]->chave);
+        //printf("\narvorefilhos %d", arvore->filhos[i]->dados[0]->chave);
         if(arvore->filhos[i]->num_reg < 2) {
-            printf("\nTestando");
+            //printf("\nTestando");
             preencher(arvore, i);
 
         }
@@ -512,6 +516,39 @@ int main(){
     arvore = inc(alocar_registro(120), arvore);
     arvore = inc(alocar_registro(70), arvore);
     arvore = inc(alocar_registro(80), arvore);
+    arvore = inc(alocar_registro(130), arvore);
+    arvore = inc(alocar_registro(200), arvore);
+    arvore = inc(alocar_registro(210), arvore);
+    arvore = inc(alocar_registro(220), arvore);
+    arvore = inc(alocar_registro(10), arvore);
+    arvore = inc(alocar_registro(125), arvore);
+    arvore = inc(alocar_registro(25), arvore);
+    arvore = inc(alocar_registro(90), arvore);
+    arvore = inc(alocar_registro(400), arvore);
+
+    arvore = inc(alocar_registro(31), arvore);
+    arvore = inc(alocar_registro(32), arvore);
+    arvore = inc(alocar_registro(33), arvore);
+    arvore = inc(alocar_registro(41), arvore);
+    arvore = inc(alocar_registro(42), arvore);
+    arvore = inc(alocar_registro(43), arvore);
+    arvore = inc(alocar_registro(44), arvore);
+
+    arvore = inc(alocar_registro(26), arvore);
+    arvore = inc(alocar_registro(27), arvore);
+    arvore = inc(alocar_registro(28), arvore);
+    arvore = inc(alocar_registro(29), arvore);
+    arvore = inc(alocar_registro(51), arvore);
+    arvore = inc(alocar_registro(52), arvore);
+    arvore = inc(alocar_registro(53), arvore);
+
+    arvore = inc(alocar_registro(401), arvore);
+    arvore = inc(alocar_registro(402), arvore);
+    arvore = inc(alocar_registro(403), arvore);
+    arvore = inc(alocar_registro(404), arvore);
+    arvore = inc(alocar_registro(405), arvore);
+    arvore = inc(alocar_registro(406), arvore);
+    arvore = inc(alocar_registro(407), arvore);
 
     reg = buscar(arvore, 9);
     if (reg != NULL)
@@ -539,21 +576,34 @@ int main(){
 
     percorrer_nos(arvore, 0);
     printf("\n\n");
-    remover(arvore, 300);
-    remover(arvore, 300);
+    //remover(arvore, 32);
+    remover(arvore, 32);
     percorrer_nos(arvore, 0);
     printf("\n\n");
-    remover(arvore, 70);
+    remover(arvore, 31);
     percorrer_nos(arvore, 0);
     printf("\n\n");
     remover(arvore, 30);
     percorrer_nos(arvore, 0);
     printf("\n\n");
-    remover(arvore, 50);
+    remover(arvore, 28);
     percorrer_nos(arvore, 0);
     printf("\n\n");
-    remover(arvore, 60);
+    remover(arvore, 26);
     percorrer_nos(arvore, 0);
+    printf("\n\n");
+    remover(arvore, 27);
+    percorrer_nos(arvore, 0);
+    percorrer_nos(arvore, 0);
+    printf("\n\n");
+    remover(arvore, 20);
+    percorrer_nos(arvore, 0);
+    printf("\n\n");
+    remover(arvore, 40);
+    percorrer_nos(arvore, 0);
+    /*printf("\n\n");
+    remover(arvore, 50);
+    percorrer_nos(arvore, 0);*/
     //printf("\nNUM_REG DA ARVORE: %d", arvore->filhos[1]->num_reg);
 
     ///CORRIGIR A REMOÇÃO DE CHAVES QUE NÃO EXISTEM
